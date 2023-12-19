@@ -1,19 +1,22 @@
 import SwiftUI
 
-struct SheetItem: View {
+/// A single item on the cheat sheet, including the name, keyboard shortcut, and optional icon.
+struct CheatSheetItem: View {
 	let shortcut: KeyboardShortcutDisplay
 
 	var body: some View {
 		HStack {
 			label
-			// TODO: description below name
+			// TODO: add description below name
 			Spacer(minLength: 48)
 			shortcutDisplay
 		}
 	}
 }
 
-private extension SheetItem {
+// MARK: - Supporting Views
+
+private extension CheatSheetItem {
 	@ViewBuilder var label: some View {
 		Group {
 			if let icon = shortcut.icon {

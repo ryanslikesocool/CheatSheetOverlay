@@ -1,20 +1,21 @@
 import SwiftUI
 
-struct CheatSheet: View {
+struct ContentView: View {
 	let groups: [KeyboardShortcutGroup]
 
 	var body: some View {
 		VStack(alignment: .leading, spacing: 16) {
+			// TODO: support multiple columns
 			ForEach(groups.indices, id: \.self) { i in
 				if let name = groups[i].name {
 					Text(name)
 						.font(.headline)
 				}
-				
+
 				ForEach(groups[i].shortcuts.indices, id: \.self) { j in
-					SheetItem(shortcut: groups[i].shortcuts[j])
+					CheatSheetItem(shortcut: groups[i].shortcuts[j])
 				}
-				
+
 				if i != groups.indices.last {
 					Divider()
 				}

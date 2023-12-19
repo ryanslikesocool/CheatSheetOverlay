@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// A group of keyboard shortcuts with an optional name and icon.
 public struct KeyboardShortcutGroup {
 	public var name: String?
 	public var icon: Image?
