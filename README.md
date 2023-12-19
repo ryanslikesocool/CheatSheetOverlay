@@ -1,5 +1,5 @@
 # CheatSheetOverlay
-Customizable keyboard shortcut cheat sheet overlay for SwiftUI
+Customizable keyboard shortcut cheat sheet overlay for SwiftUI\
 ![A preview of the cheat sheet, displaying multiple keyboard shortcut items in a vertical list](images~/preview.png)
 
 ## Requirements
