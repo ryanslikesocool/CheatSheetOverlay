@@ -2,21 +2,15 @@ import SwiftUI
 
 extension EventModifiers {
 	func cases() -> [EventModifiers] {
-		Self.allCases.filter(contains)
+		[
+			.control,
+			.option,
+			.shift,
+			.command,
+		].filter(contains)
 	}
-}
 
-extension EventModifiers: CaseIterable {
-	public static var allCases: [EventModifiers] = [
-		.control,
-		.option,
-		.shift,
-		.command,
-	]
-}
-
-extension EventModifiers: CustomStringConvertible {
-	public var description: String {
+	var displayString: String {
 		switch self {
 			case .capsLock: ""
 			case .control: "⌃"
@@ -24,7 +18,7 @@ extension EventModifiers: CustomStringConvertible {
 			case .shift: "⇧"
 			case .command: "⌘"
 			case .numericPad: ""
-			default: cases().map(\.description).joined(separator: " ")
+			default: cases().map(\.displayString).joined(separator: " ")
 		}
 	}
 }

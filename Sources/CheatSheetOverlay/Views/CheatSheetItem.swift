@@ -30,13 +30,8 @@ private extension CheatSheetItem {
 		}
 	}
 
-	@ViewBuilder var shortcutDisplay: some View {
-		let text: String = [
-			shortcut.keyboardShortcut.modifiers.description,
-			String(shortcut.keyboardShortcut.key.character).uppercased(),
-		].joined(separator: " ")
-
-		Text(text)
+	var shortcutDisplay: some View {
+		Text(shortcut.keyboardShortcut.displayString)
 			.monospaced()
 			.foregroundStyle(.secondary)
 	}

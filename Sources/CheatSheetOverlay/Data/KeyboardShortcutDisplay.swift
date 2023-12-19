@@ -9,17 +9,13 @@ public struct KeyboardShortcutDisplay: Sendable {
 	/// The keyboard shortcut.
 	public var keyboardShortcut: KeyboardShortcut
 
-	public init<S: StringProtocol>(_ title: S, icon: Image? = nil, shortcut keyboardShortcut: KeyboardShortcut) {
-		name = String(title)
+	public init<S: StringProtocol>(_ name: S, icon: Image? = nil, shortcut keyboardShortcut: KeyboardShortcut) {
+		self.name = String(name)
 		self.icon = icon
 		self.keyboardShortcut = keyboardShortcut
 	}
 
-	public init<S: StringProtocol>(
-		_ name: S,
-		systemImage: String? = nil,
-		shortcut keyboardShortcut: KeyboardShortcut
-	) {
+	public init<S: StringProtocol>(_ name: S, systemImage: String?, shortcut keyboardShortcut: KeyboardShortcut) {
 		self.init(
 			name,
 			icon: {
