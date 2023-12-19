@@ -1,12 +1,23 @@
 import SwiftUI
 
 struct CheatSheet: View {
-	let shortcuts: [KeyboardShortcutDisplay]
+	let groups: [KeyboardShortcutGroup]
 
 	var body: some View {
-		VStack(spacing: 16) {
-			ForEach(shortcuts.indices, id: \.self) { i in
-				SheetItem(shortcut: shortcuts[i])
+		VStack(alignment: .leading, spacing: 16) {
+			ForEach(groups.indices, id: \.self) { i in
+				if let name = groups[i].name {
+					Text(name)
+						.font(.headline)
+				}
+				
+				ForEach(groups[i].shortcuts.indices, id: \.self) { j in
+					SheetItem(shortcut: groups[i].shortcuts[j])
+				}
+				
+				if i != groups.indices.last {
+					Divider()
+				}
 			}
 		}
 		.fixedSize()

@@ -4,7 +4,7 @@ struct CheatSheetOverlayModifier: ViewModifier {
 	@Environment(\.cheatSheetRevealDelay) private var revealDelay
 	@ObservedObject private var cheatSheetState: CheatSheetState = .shared
 
-	let shortcuts: [KeyboardShortcutDisplay]
+	let groups: [KeyboardShortcutGroup]
 
 	func body(content: Content) -> some View {
 		content
@@ -12,7 +12,7 @@ struct CheatSheetOverlayModifier: ViewModifier {
 			.onDisappear(perform: cheatSheetState.destroyEventMonitor)
 			.overlay {
 				if cheatSheetState.state {
-					CheatSheet(shortcuts: shortcuts)
+					CheatSheet(groups: groups)
 						.transition(.opacity.combined(with: .scale(scale: 0.98, anchor: .bottom)))
 				}
 			}
@@ -25,6 +25,14 @@ struct CheatSheetOverlayModifier: ViewModifier {
 
 public extension View {
 	func cheatSheetOverlay<S: Sequence>(_ shortcuts: S) -> some View where S.Element == KeyboardShortcutDisplay {
-		modifier(CheatSheetOverlayModifier(shortcuts: Array(shortcuts)))
+		modifier(CheatSheetOverlayModifier(groups: [KeyboardShortcutGroup(nil, shortcuts: shortcuts)]))
+	}
+
+	func cheatSheetOverlay<S: Sequence>(_ groups: S) -> some View where S.Element == KeyboardShortcutGroup {
+		modifier(CheatSheetOverlayModifier(groups: Array(groups)))
+	}
+
+	func cheatSheetOverlay(_ firstGroup: KeyboardShortcutGroup, _ additionalGroups: KeyboardShortcutGroup...) -> some View {
+		modifier(CheatSheetOverlayModifier(groups: [firstGroup] + additionalGroups))
 	}
 }

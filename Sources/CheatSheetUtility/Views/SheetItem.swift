@@ -25,7 +25,6 @@ private extension SheetItem {
 				Text(shortcut.name)
 			}
 		}
-		.font(.headline)
 	}
 
 	@ViewBuilder var shortcutDisplay: some View {
