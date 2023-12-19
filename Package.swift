@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "CheatSheetUtility",
+    name: "CheatSheetOverlay",
 	defaultLocalization: "en",
 	platforms: [
 		.macOS(.v13),
@@ -11,12 +11,12 @@ let package = Package(
 	],
     products: [
         .library(
-            name: "CheatSheetUtility",
-            targets: ["CheatSheetUtility"]),
+            name: "CheatSheetOverlay",
+            targets: ["CheatSheetOverlay"]),
     ],
     targets: [
         .target(
-            name: "CheatSheetUtility"
+            name: "CheatSheetOverlay"
 		),
     ]
 )
