@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CheatSheetModifier: ViewModifier {
 	@Environment(\.cheatSheetRevealDelay) private var revealDelay
+	@Environment(\.cheatSheetActivationModifier) private var activationModifier
 	@StateObject private var cheatSheetState: CheatSheetState = CheatSheetState()
 
 	let groups: [KeyboardShortcutGroup]
@@ -17,8 +18,11 @@ struct CheatSheetModifier: ViewModifier {
 				}
 			}
 			.animation(.easeOut(duration: 0.1), value: cheatSheetState.state)
-			.onChange(of: revealDelay) { _ in
-				cheatSheetState.revealDelay = revealDelay
+			.onChange(of: revealDelay) { newValue in
+				cheatSheetState.revealDelay = newValue
+			}
+			.onChange(of: activationModifier) { newValue in
+				cheatSheetState.activationModifier = newValue
 			}
 	}
 }
@@ -36,11 +40,5 @@ public extension View {
 	/// - Parameter groups: The groups of keyboard shortcut to display on the cheat sheet.
 	func cheatSheet<S: Sequence>(_ groups: S) -> some View where S.Element == KeyboardShortcutGroup {
 		modifier(CheatSheetModifier(groups: Array(groups)))
-	}
-
-	/// Add a cheat sheet overlay and required event monitors to this view.
-	/// - Parameter groups: The groups of keyboard shortcut to display on the cheat sheet.
-	func cheatSheet(_ firstGroup: KeyboardShortcutGroup, _ additionalGroups: KeyboardShortcutGroup...) -> some View {
-		modifier(CheatSheetModifier(groups: [firstGroup] + additionalGroups))
 	}
 }
