@@ -1,11 +1,14 @@
 import SwiftUI
 
-struct CheatSheetModifier: ViewModifier {
-	@Environment(\.cheatSheetRevealDelay) private var revealDelay
-	@Environment(\.cheatSheetActivationModifier) private var activationModifier
-	@StateObject private var cheatSheetState: CheatSheetState = CheatSheetState()
+struct CheatSheetModifier<SheetContent: View>: ViewModifier {
+	@StateObject private var cheatSheetState: CheatSheetState
 
-	let groups: [KeyboardShortcutGroup]
+	private let sheetContent: () -> SheetContent
+
+	init(revealDelay: TimeInterval, activationKey: NSEvent.ModifierFlags, content sheetContent: @escaping () -> SheetContent) {
+		self.sheetContent = sheetContent
+		_cheatSheetState = StateObject(wrappedValue: CheatSheetState(revealDelay: revealDelay, activationKey: activationKey))
+	}
 
 	func body(content: Content) -> some View {
 		content
@@ -13,17 +16,11 @@ struct CheatSheetModifier: ViewModifier {
 			.onDisappear(perform: cheatSheetState.destroyEventMonitor)
 			.overlay {
 				if cheatSheetState.state {
-					ContentView(groups: groups)
+					CheatSheetPanel(content: sheetContent)
 						.transition(.opacity.combined(with: .scale(scale: 0.98, anchor: .bottom)))
 				}
 			}
 			.animation(.easeOut(duration: 0.1), value: cheatSheetState.state)
-			.onChange(of: revealDelay) { newValue in
-				cheatSheetState.revealDelay = newValue
-			}
-			.onChange(of: activationModifier) { newValue in
-				cheatSheetState.activationModifier = newValue
-			}
 	}
 }
 
@@ -31,14 +28,15 @@ struct CheatSheetModifier: ViewModifier {
 
 public extension View {
 	/// Add a cheat sheet overlay and required event monitors to this view.
-	/// - Parameter shortcuts: The shortcuts to display on the cheat sheet.
-	func cheatSheet<S: Sequence>(_ shortcuts: S) -> some View where S.Element == KeyboardShortcutDisplay {
-		modifier(CheatSheetModifier(groups: [KeyboardShortcutGroup(nil, shortcuts: shortcuts)]))
-	}
-
-	/// Add a cheat sheet overlay and required event monitors to this view.
-	/// - Parameter groups: The groups of keyboard shortcut to display on the cheat sheet.
-	func cheatSheet<S: Sequence>(_ groups: S) -> some View where S.Element == KeyboardShortcutGroup {
-		modifier(CheatSheetModifier(groups: Array(groups)))
+	/// - Parameters:
+	///   - revealDelay: The time between when the activation key is held and when the cheat sheet appears.
+	///   - activationKey: The key held to activate the cheat sheet.
+	///   - content: The content of the cheat sheet.
+	func cheatSheet<Content: View>(
+		revealDelay: TimeInterval = 0.75,
+		activationKey: NSEvent.ModifierFlags = .command,
+		@ViewBuilder content: @escaping () -> Content
+	) -> some View {
+		modifier(CheatSheetModifier(revealDelay: revealDelay, activationKey: activationKey, content: content))
 	}
 }

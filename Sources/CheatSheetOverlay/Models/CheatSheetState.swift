@@ -4,11 +4,16 @@ import SwiftUI
 final class CheatSheetState: ObservableObject {
 	@Published var state: Bool = false
 
-	var revealDelay: TimeInterval = CheatSheetRevealDelayKey.defaultValue
-	var activationModifier: NSEvent.ModifierFlags = CheatSheetActivationModifierKey.defaultValue
+	private let revealDelay: TimeInterval
+	private let activationKey: NSEvent.ModifierFlags
 
 	private var eventMonitor: Any? = nil
 	private var revealTimer: Timer? = nil
+
+	init(revealDelay: TimeInterval, activationKey: NSEvent.ModifierFlags) {
+		self.revealDelay = revealDelay
+		self.activationKey = activationKey
+	}
 }
 
 // MARK: - Event Monitor
@@ -33,7 +38,7 @@ extension CheatSheetState {
 private extension CheatSheetState {
 	/// Receive an event from the event monitor.
 	func onEvent(_ event: NSEvent) -> NSEvent? {
-		let state = event.modifierFlags.contains(activationModifier)
+		let state = event.modifierFlags.contains(activationKey)
 
 		if state {
 			revealTimer = Timer.scheduledTimer(withTimeInterval: revealDelay, repeats: false) { [weak self] _ in
