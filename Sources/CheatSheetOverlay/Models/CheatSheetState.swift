@@ -19,12 +19,12 @@ final class CheatSheetState: ObservableObject {
 // MARK: - Event Monitor
 
 extension CheatSheetState {
-	/// Create the event monitor to listen for the command key.
+	/// Create the event monitor to listen for the activation key.
 	func createEventMonitor() {
 		eventMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged, handler: onEvent)
 	}
 
-	/// Destroy the event monitor listening for the command key.
+	/// Destroy the event monitor listening for the activation key.
 	func destroyEventMonitor() {
 		if let eventMonitor {
 			NSEvent.removeMonitor(eventMonitor)
