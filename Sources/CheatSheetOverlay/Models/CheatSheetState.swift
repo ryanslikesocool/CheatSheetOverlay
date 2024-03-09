@@ -21,7 +21,7 @@ final class CheatSheetState: ObservableObject {
 extension CheatSheetState {
 	/// Create the event monitor to listen for the activation key.
 	func createEventMonitor() {
-		eventMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged, handler: onEvent)
+		eventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.flagsChanged, .keyDown], handler: onEvent)
 	}
 
 	/// Destroy the event monitor listening for the activation key.
@@ -38,14 +38,19 @@ extension CheatSheetState {
 private extension CheatSheetState {
 	/// Receive an event from the event monitor.
 	func onEvent(_ event: NSEvent) -> NSEvent? {
-		let state = event.modifierFlags.contains(activationKey)
-
-		if state {
-			revealTimer = Timer.scheduledTimer(withTimeInterval: revealDelay, repeats: false) { [weak self] _ in
-				self?.applyState(state)
-			}
-		} else {
-			applyState(state)
+		switch event.type {
+			case .flagsChanged:
+				if event.modifierFlags.intersection(.deviceIndependentFlagsMask) == activationKey {
+					revealTimer = Timer.scheduledTimer(withTimeInterval: revealDelay, repeats: false) { [weak self] _ in
+						self?.applyState(true)
+					}
+				} else {
+					applyState(false)
+				}
+			case .keyDown:
+				applyState(false)
+			default:
+				break
 		}
 
 		return event
