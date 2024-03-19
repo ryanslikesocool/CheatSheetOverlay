@@ -55,12 +55,12 @@ ContentView()
 				.keyboardShortcut("x")
 		}
 
-		Divider()
-
-		Label("Print", systemImage: "printer")
-			.keyboardShortcut("p")
-		Label("Go Wild", systemImage: "sparkles")
-			.keyboardShortcut(.return, modifiers: [.control, .option, .shift, .command])
+		GroupBox {
+			Label("Print", systemImage: "printer")
+				.keyboardShortcut("p")
+			Label("Go Wild", systemImage: "sparkles")
+				.keyboardShortcut(.return, modifiers: [.control, .option, .shift, .command])
+		}
 	}
 ```
 

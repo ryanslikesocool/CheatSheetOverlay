@@ -9,7 +9,9 @@ struct CheatSheetPanel<SheetContent: View>: View {
 
 	var body: some View {
 		VStack(alignment: .leading, spacing: 16) {
-			sheetContent()
+			Divided {
+				sheetContent()
+			}
 		}
 		.groupBoxStyle(.cheatSheet)
 		.labeledContentStyle(.cheatSheet)
