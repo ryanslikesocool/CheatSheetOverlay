@@ -14,7 +14,7 @@ struct CheatSheetLabelStyle: LabelStyle {
 					configuration.icon
 					configuration.title
 				}
-				.font(.body)
+				.fontWeight(.medium)
 			})
 		}
 	}
