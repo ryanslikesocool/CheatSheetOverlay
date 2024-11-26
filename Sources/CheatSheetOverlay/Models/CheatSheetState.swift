@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 
+@MainActor
 final class CheatSheetState: ObservableObject {
 	@Published var state: Bool = false
 
@@ -42,7 +43,9 @@ private extension CheatSheetState {
 			case .flagsChanged:
 				if event.modifierFlags.intersection(.deviceIndependentFlagsMask) == activationKey {
 					revealTimer = Timer.scheduledTimer(withTimeInterval: revealDelay, repeats: false) { [weak self] _ in
-						self?.applyState(true)
+						Task {
+							await self?.applyState(true)
+						}
 					}
 				} else {
 					applyState(false)

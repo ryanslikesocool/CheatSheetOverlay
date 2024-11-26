@@ -1,16 +1,22 @@
 import SwiftUI
 
-struct CheatSheetModifier<SheetContent: View>: ViewModifier {
+struct CheatSheetModifier<SheetContent>: ViewModifier where
+	SheetContent: View
+{
 	@StateObject private var cheatSheetState: CheatSheetState
 
 	private let sheetContent: () -> SheetContent
 
-	init(revealDelay: TimeInterval, activationKey: NSEvent.ModifierFlags, content sheetContent: @escaping () -> SheetContent) {
+	public init(
+		revealDelay: TimeInterval,
+		activationKey: NSEvent.ModifierFlags,
+		content sheetContent: @escaping () -> SheetContent
+	) {
 		self.sheetContent = sheetContent
 		_cheatSheetState = StateObject(wrappedValue: CheatSheetState(revealDelay: revealDelay, activationKey: activationKey))
 	}
 
-	func body(content: Content) -> some View {
+	public func body(content: Content) -> some View {
 		content
 			.onAppear(perform: cheatSheetState.createEventMonitor)
 			.onDisappear(perform: cheatSheetState.destroyEventMonitor)
@@ -32,11 +38,13 @@ public extension View {
 	///   - revealDelay: The time between when the activation key is held and when the cheat sheet appears.
 	///   - activationKey: The key held to activate the cheat sheet.
 	///   - content: The content of the cheat sheet.
-	func cheatSheet<Content: View>(
+	func cheatSheet<Content>(
 		revealDelay: TimeInterval = 0.75,
 		activationKey: NSEvent.ModifierFlags = .command,
 		@ViewBuilder content: @escaping () -> Content
-	) -> some View {
+	) -> some View where
+		Content: View
+	{
 		modifier(CheatSheetModifier(revealDelay: revealDelay, activationKey: activationKey, content: content))
 	}
 }

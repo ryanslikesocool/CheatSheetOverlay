@@ -3,23 +3,31 @@ import SwiftUI
 struct CheatSheetLabelStyle: LabelStyle {
 	@Environment(\.keyboardShortcut) private var keyboardShortcut: KeyboardShortcut?
 
-	func makeBody(configuration: Configuration) -> some View {
+	public init() { }
+
+	public func makeBody(configuration: Configuration) -> some View {
 		if let keyboardShortcut {
-			LabeledContent(content: {
+			LabeledContent {
 				Text(keyboardShortcut.displayString)
 					.monospaced()
 					.foregroundStyle(.secondary)
-			}, label: {
+			} label: {
 				HStack {
 					configuration.icon
 					configuration.title
 				}
 				.fontWeight(.medium)
-			})
+			}
 		}
 	}
 }
 
-extension LabelStyle where Self == CheatSheetLabelStyle {
-	static var cheatSheet: Self { Self() }
+// MARK: - Convenience
+
+extension LabelStyle where
+	Self == CheatSheetLabelStyle
+{
+	static var cheatSheet: Self {
+		Self()
+	}
 }

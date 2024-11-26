@@ -1,6 +1,9 @@
 import SwiftUI
 
-public extension Label where Title == Text, Icon == EmptyView {
+public extension Label where
+	Title == Text,
+	Icon == EmptyView
+{
 	init<S: StringProtocol>(_ title: S) {
 		self.init(title: { Text(title) }, icon: EmptyView.init)
 	}

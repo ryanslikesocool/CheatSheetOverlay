@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct CheatSheetLabeledContentStyle: LabeledContentStyle {
-	func makeBody(configuration: Configuration) -> some View {
+	public init() { }
+
+	public func makeBody(configuration: Configuration) -> some View {
 		HStack {
 			configuration.label
 				.font(.headline)
@@ -13,6 +15,12 @@ struct CheatSheetLabeledContentStyle: LabeledContentStyle {
 	}
 }
 
-extension LabeledContentStyle where Self == CheatSheetLabeledContentStyle {
-	static var cheatSheet: Self { Self() }
+// MARK: - Convenience
+
+extension LabeledContentStyle where
+	Self == CheatSheetLabeledContentStyle
+{
+	static var cheatSheet: Self {
+		Self()
+	}
 }

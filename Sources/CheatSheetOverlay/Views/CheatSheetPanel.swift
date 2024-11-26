@@ -1,13 +1,15 @@
 import SwiftUI
 
-struct CheatSheetPanel<SheetContent: View>: View {
+struct CheatSheetPanel<SheetContent>: View where
+	SheetContent: View
+{
 	private let sheetContent: () -> SheetContent
 
-	init(content sheetContent: @escaping () -> SheetContent) {
+	public init(content sheetContent: @escaping () -> SheetContent) {
 		self.sheetContent = sheetContent
 	}
 
-	var body: some View {
+	public var body: some View {
 		VStack(alignment: .leading, spacing: 16) {
 			Divided {
 				sheetContent()
@@ -23,8 +25,12 @@ struct CheatSheetPanel<SheetContent: View>: View {
 		.compositingGroup()
 		.shadow(radius: 8, y: 4)
 	}
+}
 
-	private var containerShape: RoundedRectangle {
+// MARK: - Supporting Views
+
+private extension CheatSheetPanel {
+	var containerShape: RoundedRectangle {
 		RoundedRectangle(cornerRadius: 16)
 	}
 }
